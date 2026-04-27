@@ -1,5 +1,6 @@
 import express from "express";
 import { marketService } from "../services/market.instance";
+import { HttpError } from "../errors/HttpError";
 
 const router = express.Router();
 
@@ -38,6 +39,29 @@ router.get("/wallets/:walletId", (req, res) => {
 
     return res.status(200).json(wallet);
   } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/wallets/:walletId/stocks/:stockName", (req, res) => {
+  try {
+    const { walletId, stockName } = req.params;
+    const { type } = req.body;
+
+    if (type !== "buy" && type !== "sell") {
+        return res.status(400).json({ error: "Invalid operation type" });
+    }
+
+    marketService.performOperation(walletId, stockName, type);
+
+    return res.status(200).json({
+      message: "Operation performed successfully",
+    });
+  } catch (err) {
+    if (err instanceof HttpError) {
+      return res.status(err.statusCode).json({ error: err.message });
+    }
+
     return res.status(500).json({ error: "Internal server error" });
   }
 });
