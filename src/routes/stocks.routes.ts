@@ -21,4 +21,14 @@ router.post("/stocks", (req, res) => {
   }
 });
 
+router.get("/stocks", (req, res) => {
+  try {
+    const stocks = marketService.getBankStocks();
+
+    return res.status(200).json({ stocks });
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;
