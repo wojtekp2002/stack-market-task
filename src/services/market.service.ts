@@ -26,7 +26,7 @@ export class MarketService {
   getWallet(walletId: string): Wallet {
     const wallet = this.wallets.get(walletId);
     
-    if(!wallet) {
+    if (!wallet) {
       return {
         id: walletId,
         stocks: []
@@ -72,13 +72,13 @@ export class MarketService {
   performOperation(walletId: string, stockName: string, type: OperationType): void {
     const bankStock = this.bankStocks.find((stock) => stock.name === stockName);
 
-    if(!bankStock) {
+    if (!bankStock) {
       throw new HttpError(404, "Stock not found");
     }
 
-    if(type === "buy") {
+    if (type === "buy") {
       if (bankStock.quantity <= 0) {
-        throw new HttpError(400, "Stock is not available in bank")
+        throw new HttpError(400, "Stock is not available in bank");
       }
 
       const wallet = this.getOrCreateWallet(walletId);
