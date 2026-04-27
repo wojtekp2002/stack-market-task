@@ -1,4 +1,4 @@
-import { OperationType } from "./operation.type";
+import { OperationType } from "../types/operation.type";
 
 export interface AuditLogEntry {
   type: OperationType;
