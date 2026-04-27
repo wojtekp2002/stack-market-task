@@ -31,4 +31,15 @@ router.get("/stocks", (req, res) => {
   }
 });
 
+router.get("/wallets/:walletId", (req, res) => {
+  try {
+    const { walletId } = req.params;
+    const wallet = marketService.getWallet(walletId);
+
+    return res.status(200).json(wallet);
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;
