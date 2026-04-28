@@ -4,6 +4,38 @@ import { HttpError } from "../errors/HttpError";
 
 const router = express.Router();
 
+router.get("/stocks", (req, res) => {
+  try {
+    const stocks = marketService.getBankStocks();
+
+    return res.status(200).json({ stocks });
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/wallets/:walletId", (req, res) => {
+  try {
+    const { walletId } = req.params;
+    const wallet = marketService.getWallet(walletId);
+
+    return res.status(200).json(wallet);
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/wallets/:walletId/stocks/:stockName", (req, res) => {
+  try {
+    const { walletId, stockName } = req.params;
+    const quantity = marketService.getWalletStockQuantity(walletId, stockName);
+
+    return res.status(200).json(quantity);
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.post("/stocks", (req, res) => {
   const { stocks } = req.body;
 
@@ -21,27 +53,6 @@ router.post("/stocks", (req, res) => {
     return res.status(200).json({
       message: "Bank stocks updated successfully",
     });
-  } catch (err) {
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-router.get("/stocks", (req, res) => {
-  try {
-    const stocks = marketService.getBankStocks();
-
-    return res.status(200).json({ stocks });
-  } catch (err) {
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-router.get("/wallets/:walletId", (req, res) => {
-  try {
-    const { walletId } = req.params;
-    const wallet = marketService.getWallet(walletId);
-
-    return res.status(200).json(wallet);
   } catch (err) {
     return res.status(500).json({ error: "Internal server error" });
   }
@@ -73,7 +84,7 @@ router.post("/wallets/:walletId/stocks/:stockName", (req, res) => {
 router.get("/log", (req, res) => {
   try {
     const auditLog = marketService.getAuditLog();
-    return res.status(200).json(auditLog);
+    return res.status(200).json({log: auditLog});
   } catch (err) {
     return res.status(500).json({ error: "Internal server error" });
   }

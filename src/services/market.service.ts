@@ -42,6 +42,13 @@ export class MarketService {
     };
   }
 
+  getWalletStockQuantity(walletId: string, stockName: string): number {
+    const wallet = this.getWallet(walletId);
+    const stock = wallet.stocks.find((stock) => stock.name === stockName);
+
+    return stock?.quantity ?? 0;
+  }
+
   private getOrCreateWallet(walletId: string): Wallet {
     let wallet = this.wallets.get(walletId);
 
@@ -125,7 +132,6 @@ export class MarketService {
 
     throw new HttpError(400, "Invalid operation type");
   }
-
 
   getAuditLog(): AuditLogEntry[] {
     return this.auditLog.map((entry) => ({
