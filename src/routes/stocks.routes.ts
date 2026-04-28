@@ -11,6 +11,10 @@ router.post("/stocks", (req, res) => {
     return res.status(400).json({ error: "Stocks must be an array" });
   }
 
+  if (stocks.some(s => !s.name || typeof s.quantity !== "number")) {
+    return res.status(400).json({ error: "Invalid stock format" });
+  }
+
   try {
     marketService.setBankStocks(stocks);
 
@@ -66,14 +70,17 @@ router.post("/wallets/:walletId/stocks/:stockName", (req, res) => {
   }
 });
 
-router.get("/audit-log", (req, res) => {
-    try {
-        const auditLog = marketService.getAuditLog();
-        return res.status(200).json(auditLog);
+router.get("/log", (req, res) => {
+  try {
+    const auditLog = marketService.getAuditLog();
+    return res.status(200).json(auditLog);
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 
-    } catch (err) {
-        return res.status(500).json({ error: "Internal server error" });
-    }
+router.post("/chaos", (req, res) => {
+  process.exit(1);
 });
 
 
