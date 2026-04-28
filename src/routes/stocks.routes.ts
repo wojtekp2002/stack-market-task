@@ -66,4 +66,15 @@ router.post("/wallets/:walletId/stocks/:stockName", (req, res) => {
   }
 });
 
+router.get("/audit-log", (req, res) => {
+    try {
+        const auditLog = marketService.getAuditLog();
+        return res.status(200).json(auditLog);
+
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
 export default router;

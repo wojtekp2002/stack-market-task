@@ -126,4 +126,13 @@ export class MarketService {
     throw new HttpError(400, "Invalid operation type");
   }
 
+
+  getAuditLog(): AuditLogEntry[] {
+    return this.auditLog.map((entry) => ({
+      type: entry.type,
+      walletId: entry.walletId,
+      stockName: entry.stockName,
+    }));
+  }
+
 }
